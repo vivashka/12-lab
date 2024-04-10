@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LabLibrary" Version="1.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="BaseClassEmoji">
       <HintPath>..\..\10-vivashka\Emoji\bin\Debug\net7.0\BaseClassEmoji.dll</HintPath>
     </Reference>
