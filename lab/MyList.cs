@@ -12,9 +12,9 @@ namespace lab
         Point<T>? beg = null;
         Point<T>? end = null;
 
-        int _count = 0;
+        private int count = 0;
 
-        public int Count => _count;
+        public int Count => count;
 
         public Point<T> MakeRandomData()
         {
@@ -23,13 +23,11 @@ namespace lab
             return new Point<T>(data);
         }
 
-        public MyList() { }
+        public MyList() {}
 
         public MyList(int size)
         {
             if (size <= 0) throw new Exception("Размер меньше нуля");
-            beg = MakeRandomData();
-            end = beg;
             for (int i = 1; i < size; i++)
             {
                 T newItem = MakeRandomItem();
@@ -53,30 +51,70 @@ namespace lab
             }
         }
 
-        public Point<T> FindItem(T item)
+        public Point<T> FindItem(string tag)
         {
             Point<T> current = beg;
             while (current != null)
             {
                 if (current.Data == null)
-                    throw new Exception("Пустые данны");
+                    throw new Exception("Пустые данные");
 
-                if (current.Data.Equals(item))
+                if (current.Data.Tag == tag)
                     return current;
-
                 current = current.Next;
             }
             return null;
         }
 
-        public bool RemoveItem(T item)
+        public bool AddOddItem()
+        {
+            if (beg == null)
+            {
+                return false;
+            }
+            Point<T> current = beg;
+
+            current.Prev = new Point<T>(MakeRandomItem());
+            while (current != null)
+            {
+                Point<T> temp = new Point<T>(MakeRandomItem());
+                temp.Prev = current.Prev;
+                current.Prev.Next = temp;
+                temp.Next = current;
+                current.Prev = temp;
+                current = current.Next;
+                count++;
+            }
+            
+
+            return true;
+        }
+
+        public void AddToEnd(T item)
+        {
+            T newData = (T)item.Clone();
+            Point<T> newItem = new Point<T>(newData);
+            if (beg == null)
+            {
+                beg = newItem;
+            }
+            else
+            {
+                end.Next = newItem;
+                newItem.Prev = end;
+            }
+            end = newItem;
+            count++;
+        }
+
+        public bool RemoveItem(string tag)
         {
             if (beg == null) throw new Exception("Пустой список");
 
-            Point<T>? pos = FindItem(item);
+            Point<T>? pos = FindItem(tag);
 
             if (pos == null) return false;
-            _count--;
+            count--;
 
             if (beg == end)
             {
@@ -105,6 +143,13 @@ namespace lab
             return true;
         }
 
+        public void Clear()
+        {
+            beg = null;
+            end = null;
+            count = 0;
+        }
+
         public T MakeRandomItem()
         {
             T data = new();
@@ -112,35 +157,31 @@ namespace lab
             return data;
         }
 
-        public void AddToEnd(T item)
-        {
-            T newData = (T)item.Clone();
-            Point<T> newItem = new Point<T>(newData);
-            _count++;
-            if (end  != null)
-            {
-                end.Next = newItem;
-                newItem.Next = end;
-                end = newItem;
-            }
-            else
-            {
-                beg = newItem;
-                end = beg;
-            }
-        }
-
         public void PrintList()
         {
-            if (_count == 0)
+            if (count == 0)
                 Console.WriteLine("Список пуст");
             
             Point<T> current = beg;
             for (int i = 0; current != null; i++)
             {
-                Console.WriteLine(current);
+                Console.WriteLine($"{i} - {current}");
                 current = current.Next;
             }
+            Console.WriteLine($"Количество элементов в коллекции = {Count}");
+        }
+
+        public MyList<T> Clone()
+        {
+            MyList<T> newCollection = new MyList<T>();
+            Point<T> current = beg;
+            for (int i = 0; current != null; i++)
+            {
+                newCollection.AddToEnd(current.Data);
+                current = current.Next;
+            }
+            Console.WriteLine(newCollection.Count);
+            return newCollection;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using BaseClassEmoji;
 using LabLibrary;
 
@@ -6,7 +7,8 @@ namespace lab
 {
     public class Program
     {
-        static MyList<Emoji> mainList;
+        static MyList<Emoji> mainList = new MyList<Emoji>();
+        static MyList<Emoji> cloneList = new MyList<Emoji>();
 
         static void Main(string[] args)
         {
@@ -19,6 +21,7 @@ namespace lab
             "Удалить из списка первый элемент с заданным именем",
             "Добавить в список элементы с номерами 1, 3, 5 и т. д.",
             "Выполнить глубокое клонирование списка",
+            "Распечатать клонированный список",
             "Удалить список из памяти",
             "Выход"};
 
@@ -31,9 +34,68 @@ namespace lab
                         Console.WriteLine("Задайте размерность списка целым положительным числом");
                         uint size = LabLib.ExtensionDoWhile<uint>();
                         mainList = new MyList<Emoji>((int)size);
+                        Menu();
+                        break;
+                    case 1:
+                        mainList.PrintList();
+                        Console.ReadKey();
+                        Menu();
+                        break;
+                    case 2:
+                        mainList.PrintList();
+                        Console.WriteLine("Введите имя эмоджи");
+                        string name = Console.ReadLine();
+                        if (mainList.RemoveItem(name))
+                        {
+                            Console.WriteLine("Элемент удалён");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Элемента не найден");
+                        }
+                        Console.ReadKey();
+                        Menu();
+                        break;
+                    case 3:
+                        mainList.PrintList();
+                        if (mainList.AddOddItem())
+                        {
+                            Console.WriteLine("Элементы добавлены");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Элемента не добавлены");
+                        }
+                        mainList.PrintList();
+                        Console.ReadKey();
+                        Menu();
+                        break;
+                    case 4:
+                        cloneList = mainList.Clone();
+                        cloneList.PrintList();
+                        Console.ReadKey();
+                        Menu();
+                        break;
+                    case 5:
+                        Console.WriteLine("Оригинальный список");
+                        mainList.PrintList();
+                        Console.WriteLine("Клониврованный список");
+                        cloneList.PrintList();
+                        Console.ReadKey();
+                        Menu();
+                        break;
+                    case 6:
+                        mainList.Clear();
+                        Console.WriteLine("Оригинальный список");
+                        mainList.PrintList();
+                        Console.ReadKey();
+                        Menu();
+                        break;
+                    case 7:
+                        Environment.Exit(0);
                         break;
                 }
-            } while (apply >= 0);
+            } while (apply < 1);
         }
 
         public static byte Display(string[] options)

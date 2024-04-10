@@ -28,7 +28,7 @@ namespace lab
 
         public override string ToString()
         {
-            return Data.ToString() ?? "";
+            return Data == null ? "": Data.ToString();
         }
 
         public override int GetHashCode()
