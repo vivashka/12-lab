@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace lab
 {
-    internal class Point<T>
+    public class Point<T>
     {
         public T? Data { get; set; }
         public Point<T> Prev { get; set; }

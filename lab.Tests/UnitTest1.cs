@@ -5,5 +5,4 @@ namespace TestProject;
 [TestClass]
 public class UnitTest1
 {
-
 }

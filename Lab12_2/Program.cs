@@ -1,32 +1,28 @@
-﻿using System;
-using System.Text;
-using AnimalEmoji;
+﻿using AnimalEmoji;
 using BaseClassEmoji;
 using ClassFaceEmoji;
 using LabLibrary;
 using SmilingEmoji;
 
-namespace lab
+namespace Lab12_2
 {
-    public class Program
+    internal class Program
     {
-        static MyList<Emoji> mainList = new MyList<Emoji>();
-        static MyList<Emoji> cloneList = new MyList<Emoji>();
+        static MyHashTable<Emoji> hashTable = new MyHashTable<Emoji>();
+
         static void Main(string[] args)
         {
             Menu();
         }
+
         public static void Menu()
         {
-            string[] tasks = {"Сформировать двунаправленный список Emoji",
-            "Распечатать полученный список",
-            "Удалить из списка первый элемент с заданным тегом",
-            "Добавить в список элементы с номерами 1, 3, 5 и т. д.",
-            "Выполнить глубокое клонирование списка",
-            "Распечатать клонированный список",
-            "Удалить список из памяти",
-            "Изменить первый элемент списка",
-            "Выход"};
+            string[] tasks = {"Создать хеш-таблицу и заполнить ее элементами.",
+                "Распечатать таблицу",
+                "Выполнить поиск элемента в хеш-таблице",
+                "Удалить найденный элемент из хеш-таблицы.",
+                "Добавить элемент",
+                "Выход"};
 
             byte apply = Display(tasks);
             do
@@ -36,82 +32,67 @@ namespace lab
                     case 0:
                         Console.WriteLine("Задайте размерность списка целым положительным числом");
                         uint size = LabLib.ExtensionDoWhile<uint>();
-                        mainList = CreateRandomEmojiList((int)size);
+                        hashTable = CreateTable((int)size);
                         Menu();
                         break;
                     case 1:
-                        mainList.PrintList();
+                        hashTable.Print();
                         Console.ReadKey();
                         Menu();
                         break;
                     case 2:
-                        mainList.PrintList();
-                        Console.WriteLine("Введите имя эмоджи");
+                        hashTable.Print();
+                        Console.WriteLine("Введите тег (ключ) эмоджи");
                         string name = Console.ReadLine();
-                        try
+
+                        if (hashTable.Contains(name))
                         {
-                            if (mainList.RemoveItem(name))
-                            {
-                                Console.WriteLine("Элемент удалён");
-                            }
-                            else
-                            {
-                                Console.WriteLine("Элемента не найден");
-                            }
+                            Console.WriteLine("Элемент найден");
                         }
-                        catch 
+                        else
                         {
-                            Console.WriteLine("Из списка нельзя удалить элементы");
-                        };
-                        
+                            Console.WriteLine("Элемент не найден");
+                        }
+
                         Console.ReadKey();
                         Menu();
                         break;
                     case 3:
-                        mainList.PrintList();
-                        if (mainList.AddOddItem())
+                        hashTable.Print();
+                        Console.WriteLine("Введите тег (ключ) эмоджи");
+                        name = Console.ReadLine();
+
+                        if (hashTable.RemoveData(name))
                         {
-                            Console.WriteLine("Элементы добавлены");
+                            Console.WriteLine("Элементы удалён");
                         }
                         else
                         {
-                            Console.WriteLine("Элемента не добавлены");
+                            Console.WriteLine("Элемента не найден");
                         }
-                        mainList.PrintList();
+                        hashTable.Print();
                         Console.ReadKey();
                         Menu();
                         break;
                     case 4:
-                        cloneList = mainList.Clone();
-                        cloneList.PrintList();
+                        Emoji item = new Emoji();
+                        item.RandomInit();
+                        Console.WriteLine("Старая таблица");
+                        hashTable.Print();
+                        try
+                        {
+                            hashTable.AddItem(item.Tag, item);
+                        }
+                        catch
+                        {
+
+                        }
+                        Console.WriteLine("Новая таблица");
+                        hashTable.Print();
                         Console.ReadKey();
                         Menu();
                         break;
                     case 5:
-                        Console.WriteLine("Оригинальный список");
-                        mainList.PrintList();
-                        Console.WriteLine("Клониврованный список");
-                        cloneList.PrintList();
-                        Console.ReadKey();
-                        Menu();
-                        break;
-                    case 6:
-                        mainList.Clear();
-                        Console.WriteLine("Оригинальный список");
-                        mainList.PrintList();
-                        Console.ReadKey();
-                        Menu();
-                        break;
-                    case 7:
-                        mainList.ChangeItem();
-                        Console.WriteLine("Оригинальный список");
-                        mainList.PrintList();
-                        Console.WriteLine("Клонированный список");
-                        cloneList.PrintList();
-                        Console.ReadKey();
-                        Menu();
-                        break;
-                    case 8:
                         Environment.Exit(0);
                         break;
                 }
@@ -160,14 +141,14 @@ namespace lab
             }
         }
 
-        public static MyList<Emoji> CreateRandomEmojiList(int length)
+        public static MyHashTable<Emoji> CreateTable(int length)
         {
-            MyList<Emoji> randomList = new MyList<Emoji>();
+            MyHashTable<Emoji> randomList = new MyHashTable<Emoji>();
             Random random = new Random();
 
             for (int i = 0; i < length; i++)
             {
-                int randomNumber = random.Next(1, 4); // Генерация числа от 1 до 3
+                int randomNumber = random.Next(1, 4);
                 Emoji emoji;
 
                 switch (randomNumber)
@@ -185,12 +166,12 @@ namespace lab
                         emoji.RandomInit();
                         break;
                     default:
-                        emoji = new Emoji(); // В случае ошибки генерации
+                        emoji = new Emoji();
                         emoji.RandomInit();
                         break;
                 }
 
-                randomList.AddToEnd(emoji);
+                randomList.AddItem(emoji.Tag, emoji);
             }
 
             return randomList;

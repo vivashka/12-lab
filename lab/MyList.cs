@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace lab
 {
-    internal class MyList<T> where T : IInit, ICloneable, new()
+    public class MyList<T> where T : IInit, ICloneable, new()
     {
-        Point<T>? beg = null;
-        Point<T>? end = null;
+        Point<T>? beg;
+        Point<T>? end;
 
         private int count = 0;
 
@@ -23,12 +23,13 @@ namespace lab
             return new Point<T>(data);
         }
 
-        public MyList() {}
+        public MyList() { }
 
         public MyList(int size)
         {
             if (size <= 0) throw new Exception("Размер меньше нуля");
-            for (int i = 1; i < size; i++)
+
+            for (int i = 1; i <= size; i++)
             {
                 T newItem = MakeRandomItem();
                 AddToEnd(newItem);
@@ -66,15 +67,28 @@ namespace lab
             return null;
         }
 
+        public bool ChangeItem()
+        {
+            if (beg != null || count != 0)
+            {
+                Point<T> temp = MakeRandomData();
+
+                temp.Next = beg.Next;
+                beg = temp;
+                return true;
+            }
+            return false;
+            
+        }
+
         public bool AddOddItem()
         {
             if (beg == null)
             {
                 return false;
             }
-            Point<T> current = beg;
+            Point<T> current = beg.Next;
 
-            current.Prev = new Point<T>(MakeRandomItem());
             while (current != null)
             {
                 Point<T> temp = new Point<T>(MakeRandomItem());
@@ -85,8 +99,6 @@ namespace lab
                 current = current.Next;
                 count++;
             }
-            
-
             return true;
         }
 
@@ -125,14 +137,14 @@ namespace lab
             if (pos.Prev ==  null)
             {
                 beg = beg?.Next;
-                beg.Next = null;
+                beg.Prev = null;
                 return true;
             }
 
             if (pos.Next == null)
             {
                 end = end.Prev;
-                beg.Next = null;
+                end.Next = null;
                 return true;
             }
 
@@ -180,7 +192,6 @@ namespace lab
                 newCollection.AddToEnd(current.Data);
                 current = current.Next;
             }
-            Console.WriteLine(newCollection.Count);
             return newCollection;
         }
     }
