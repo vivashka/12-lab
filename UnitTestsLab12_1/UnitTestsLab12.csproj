@@ -17,12 +17,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lab12_2\Lab12_2.csproj" />
+    <ProjectReference Include="..\Lab12_3\Lab12_3.csproj" />
+    <ProjectReference Include="..\Lab12_4\Lab12_4.csproj" />
     <ProjectReference Include="..\lab\lab.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="BaseClassEmoji">
       <HintPath>..\..\10-vivashka\Emoji\bin\Debug\net7.0\BaseClassEmoji.dll</HintPath>
+    </Reference>
+    <Reference Include="Lab12_2">
+      <HintPath>..\Lab12_2\bin\Debug\net7.0\Lab12_2.dll</HintPath>
     </Reference>
   </ItemGroup>
 

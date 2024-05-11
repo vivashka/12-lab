@@ -12,13 +12,6 @@ namespace lab
 
         public int Count => count;
 
-        public Point<T> MakeRandomData()
-        {
-            T data = new();
-            data.RandomInit();
-            return new Point<T>(data);
-        }
-
         public MyList() { }
 
         public MyList(int size)
@@ -38,7 +31,7 @@ namespace lab
             
             if (collection.Length == 0) throw new Exception("Коллекция пуста");
 
-            T newData = (T)collection.Clone();
+            T newData = (T)collection[0].Clone();
             beg = new Point<T>(newData);
             end = beg;
 
@@ -47,7 +40,14 @@ namespace lab
                 AddToEnd(collection[i]);
             }
         }
-
+        
+        public T MakeRandomItem()
+        {
+            T data = new();
+            data.RandomInit();
+            return data;
+        }
+        
         public Point<T> FindItem(string tag)
         {
             Point<T> current = beg;
@@ -67,14 +67,13 @@ namespace lab
         {
             if (beg != null || count != 0)
             {
-                Point<T> temp = MakeRandomData();
+                Point<T> temp = new Point<T>(MakeRandomItem());
 
                 temp.Next = beg.Next;
                 beg = temp;
                 return true;
             }
             return false;
-            
         }
 
         public bool AddOddItem()
@@ -117,7 +116,7 @@ namespace lab
 
         public bool RemoveItem(string tag)
         {
-            if (beg == null) throw new Exception("Пустой список");
+            if (beg == null) return false;
 
             Point<T>? pos = FindItem(tag);
 
@@ -156,13 +155,6 @@ namespace lab
             beg = null;
             end = null;
             count = 0;
-        }
-
-        public T MakeRandomItem()
-        {
-            T data = new();
-            data.RandomInit();
-            return data;
         }
 
         public void PrintList()

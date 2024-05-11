@@ -4,11 +4,10 @@ using System.Data.SqlTypes;
 
 namespace Lab12_2
 {
-    internal class MyHashTable<T> where T : IInit, IComparable, ICloneable, new()
+    public class MyHashTable<T> where T : IInit, IComparable, ICloneable, new()
     {
 
         Data<T>[] table;
-        bool[] removedHash;
         int count = 0;
         float fillRatio;
 
@@ -19,7 +18,6 @@ namespace Lab12_2
         public MyHashTable(int length = 10, float fillRatio = 0.72f)
         {
             table = new Data<T>[length];
-            removedHash = new bool[length];
             this.fillRatio = fillRatio;
         }
 
@@ -40,10 +38,9 @@ namespace Lab12_2
             }
             int index = FindItem(key);
             if (index < 0) return false;
-            count--;
+            
             table[index] = default;
-            if (index == GetIndex(key))
-                removedHash[index] = true;
+            count--;
             return true;
         }
 
@@ -59,9 +56,9 @@ namespace Lab12_2
             {
                 if (item != null)
                     Console.WriteLine($"{i}: Ключ: {item.Key}, Значение:{item.Value}," +
-                        $" {Math.Abs(item.Key.GetHashCode()) % Capacity} Удаление - {removedHash[i]}");
+                        $" {Math.Abs(item.Key.GetHashCode()) % Capacity}");
                 else
-                    Console.WriteLine($"{i}: Удаление - {removedHash[i]}");
+                    Console.WriteLine($"{i}");
                 i++;
             }
         }
@@ -82,17 +79,10 @@ namespace Lab12_2
                             AddData(temp[i]?.Key, temp[i].Value);
                         }
                     }
-
-                    bool[] tempRemoved = (bool[])removedHash.Clone();
-                    removedHash = new bool[temp.Length*2];
-                    for (int i = 0; i < temp.Length; i++)
-                    {
-                        removedHash[i] = tempRemoved[i];
-                    }
+                    
                 }
                 AddData(key, value);
             }
-                
         }
 
         int GetIndex(string key)
@@ -134,14 +124,13 @@ namespace Lab12_2
         int FindItem(string key)
         {
             int index = GetIndex(key);
-
-            //можно без этого
+           
             
             if (table[index] != null && table[index].Key.Equals(key))
             {
                 return index;
             }
-            if (removedHash[index]) //else
+            else
             {
                 int current = index;
                 while (current < table.Length)

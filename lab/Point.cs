@@ -30,10 +30,5 @@ namespace lab
         {
             return Data == null ? "": Data.ToString();
         }
-
-        public override int GetHashCode()
-        {
-            return Data == null ? 0 : Data.GetHashCode();
-        }
     }
 }

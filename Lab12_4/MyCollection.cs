@@ -37,14 +37,10 @@ namespace Lab12_4
         {
             return Data == null ? "" : Data.ToString();
         }
-
-        public int CompareTo(Point<T> other)
-        {
-            return Data.CompareTo(other.Data);
-        }
+        
     }
 
-    internal class MyCollection<T> : IEnumerable<T>, ICollection<T> where T : IInit, IComparable, ICloneable, new()
+    public class MyCollection<T> : IEnumerable<T>, ICollection<T> where T : IInit, IComparable, ICloneable, new()
     {
         public Point<T> root = null;
 
@@ -251,7 +247,7 @@ namespace Lab12_4
         {
             foreach(T item in this)
             {
-                if (array.Length < arrayIndex)
+                if (array.Length <= arrayIndex)
                 {
                     T[] temp = new T[array.Length*2];
                     for (int i = 0; i < array.Length; i++)
@@ -297,7 +293,6 @@ namespace Lab12_4
 
     internal class MyEnumerator<T> : IEnumerator<T> where T : IInit, IComparable, ICloneable, new()
     {
-
         public T Current => throw new NotImplementedException();
 
         object IEnumerator.Current => throw new NotImplementedException();
@@ -324,10 +319,7 @@ namespace Lab12_4
 
         public void Dispose() { }
 
-        public bool MoveNext()
-        {
-            return false;
-        }
+        public bool MoveNext() => false;
 
         public void Reset() { }
     }

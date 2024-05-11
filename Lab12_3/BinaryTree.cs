@@ -6,9 +6,9 @@ using System.Xml.Linq;
 
 namespace Lab12_3
 {
-    internal class BinaryTree<T> where T : IInit, IComparable, ICloneable, new()
+    public class BinaryTree<T> where T : IInit, IComparable, ICloneable, new()
     {
-        protected Point<T> root = null;
+        public Point<T> root = null;
 
         int count = 0;
 
@@ -18,7 +18,7 @@ namespace Lab12_3
 
         public BinaryTree(int length)
         {
-            count = length;
+            
             T data = new T();
             for (int i = 0; i < length; i++)
             {
@@ -97,6 +97,7 @@ namespace Lab12_3
             T temp = (T)key.Clone();
             if (point == null)
             {
+                count++;
                 return new Point<T>(temp);
             }
 
@@ -191,6 +192,24 @@ namespace Lab12_3
                 TranformToArray(point.Right, array, ref current);
             }
         }
+        
+        public Point<T> FindItem(Point<T> point, T item)
+        {
+            if (point == null)
+                return null;
+
+            if (point.Data.Equals(item))
+            {
+                return point;
+            }
+            else
+            {
+                if (point.Data.CompareTo(item) < 0)
+                    return FindItem(point.Left, item);
+                else
+                    return FindItem(point.Right, item);
+            }
+        }
 
         public BinaryTree<T> TransformToFindTree()
         {
@@ -206,12 +225,15 @@ namespace Lab12_3
             }
             return clone;
         }
-        public void ChangeRoot()
+        public bool ChangeRoot()
         {
             if (root != null)
             {
                 root.Data.RandomInit();
+                return true;
             }
+
+            return false;
         }
     }
 }
